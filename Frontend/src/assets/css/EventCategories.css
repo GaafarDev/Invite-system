@@ -1,0 +1,52 @@
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.event-categories {
+    text-align: center;
+}
+
+.event-categories h1{
+    text-align: left;
+    margin : 20px;
+    color: #2D2C3C;
+}
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.category-list a{
+    text-decoration: none;
+    color: #2D2C3C;
+}
+
+.category-card {
+    width: 150px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.category-image {
+    margin-top: 12px;
+    width: 120px;
+    height: 120px;
+    border-radius: 500px;
+    object-fit: cover;
+}
+
+.category-card h2 {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+
+.category-card:hover {
+    transform: scale(1.05);
+}

@@ -1,21 +1,24 @@
-// src/App.vue
 <template>
-  <div id="app">
-    <AppEvents />
+  <div class="container">
+      <NavBar/>
+      <router-view></router-view>
+      <PageFooter/>
   </div>
 </template>
 
 <script>
-import AppEvents from './components/AppEvents.vue';
+import NavBar from './components/NavBar.vue'
+import PageFooter from './components/PageFooter.vue'
 
 export default {
   name: 'App',
   components: {
-    AppEvents
+    NavBar,
+    PageFooter,
   }
-};
+}
 </script>
 
-<style>
-/* Add your styles here */
+<style scoped>
+@import './assets/css/styles.css';
 </style>
