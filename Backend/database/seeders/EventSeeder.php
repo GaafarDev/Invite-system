@@ -3,39 +3,55 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use App\Models\Event;
 
 class EventSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        DB::table('events')->insert([
-            [
-                'title' => 'Sample Event 1',
-                'description' => 'This is a sample event 1',
-                'time' => Carbon::create('2024', '07', '01', '10', '00', '00'),
-                'location' => 'Sample Location 1',
-                'capacity' => 100,
-                'organizer_contact' => 'contact1@example.com',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Sample Event 2',
-                'description' => 'This is a sample event 2',
-                'time' => Carbon::create('2024', '07', '02', '11', '00', '00'),
-                'location' => 'Sample Location 2',
-                'capacity' => 200,
-                'organizer_contact' => 'contact2@example.com',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
+        Event::create([
+            'category' => 'Educational & Business',
+            'title' => 'Tech Conference 2024',
+            'description' => 'A conference about the latest in technology.',
+            'location' => 'San Francisco, CA',
+            'start_datetime' => '2024-07-01 09:00:00',
+            'end_datetime' => '2024-07-01 17:00:00',
+            'image_link' => 'https://example.com/image1.jpg',
+            'user_id' => 1,
+        ]);
+
+        Event::create([
+            'category' => 'Educational & Business',
+            'title' => 'Laravel Workshop',
+            'description' => 'A workshop on building web applications with Laravel.',
+            'location' => 'Los Angeles, CA',
+            'start_datetime' => '2024-07-10 10:00:00',
+            'end_datetime' => '2024-07-10 16:00:00',
+            'image_link' => 'https://example.com/image2.jpg',
+            'user_id' => 1,
+        ]);
+
+        Event::create([
+            'category' => 'Technology & Innovation',
+            'title' => 'AI in 2024',
+            'description' => 'A webinar discussing the advancements in AI.',
+            'location' => 'Online',
+            'start_datetime' => '2024-07-15 14:00:00',
+            'end_datetime' => '2024-07-15 15:00:00',
+            'image_link' => 'https://example.com/image3.jpg',
+            'user_id' => 1,
+        ]);
+
+        Event::create([
+            'category' => 'Travel & Adventure',
+            'title' => 'Developer Meetup',
+            'description' => 'A meetup for developers to network and share ideas.',
+            'location' => 'New York, NY',
+            'start_datetime' => '2024-07-20 18:00:00',
+            'end_datetime' => '2024-07-20 20:00:00',
+            'image_link' => 'https://example.com/image4.jpg',
+            'user_id' => 1,
         ]);
     }
 }
+
