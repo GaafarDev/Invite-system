@@ -1,6 +1,5 @@
 <template>
     <div class="eventCard">
-        <h1>Explore Events</h1>
         <div class="upperCard">
             <div class="eventCardImage">
                 <img src="../assets/Images/Event.png" alt="Event Image"/>
