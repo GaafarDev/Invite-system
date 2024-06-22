@@ -64,8 +64,8 @@ export default {
             events: [],
             displayedUpcomingEvents: [],
             displayedPastEvents: [],
-            upcomingLimit: 6, // 2 rows of 3 events each
-            pastLimit: 6, // 2 rows of 3 events each
+            upcomingLimit: 6,
+            pastLimit: 6,
         };
     },
     computed: {
@@ -86,11 +86,11 @@ export default {
     },
     methods: {
         loadMoreUpcoming() {
-            this.upcomingLimit += 6; // Load 2 more rows
+            this.upcomingLimit += 6;
             this.updateDisplayedUpcomingEvents();
         },
         loadMorePast() {
-            this.pastLimit += 6; // Load 2 more rows
+            this.pastLimit += 6;
             this.updateDisplayedPastEvents();
         },
         updateDisplayedUpcomingEvents() {
