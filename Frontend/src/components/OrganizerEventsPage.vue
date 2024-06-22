@@ -115,9 +115,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .organizer-events-page {
     padding: 20px;
+    margin-left : 5%;
+    margin-right: 5%;
 }
 
 .filters {
@@ -140,18 +142,15 @@ export default {
 
 .upcoming-events, .past-events {
     margin-bottom: 40px;
+
 }
 
 .event-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 62px;
 }
 
-.event-cards::after {
-    content: "";
-    flex: auto;
-}
 
 .see-more-btn {
     display: block;
@@ -162,6 +161,7 @@ export default {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-radius: 5px;
 }
 
 .see-more-btn:hover {
