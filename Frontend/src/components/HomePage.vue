@@ -26,20 +26,20 @@
       </div>
     </div>
     <EventCategories />
-    <EventCard v-for="event in events" :key="event.id" :event="event" />
+    <OrganizerEventsPage/>
   </div>
 </template>
 
 
 <script>
-import EventCard from './EventCard.vue';
 import EventCategories from './EventCategories.vue';
 import apiClient from '../services/api';
+import OrganizerEventsPage from './OrganizerEventsPage.vue';
 
 export default {
   components: {
-    EventCard,
     EventCategories,
+    OrganizerEventsPage,
   },
   data() {
     return {

@@ -155,6 +155,10 @@ export default {
     margin-right: 5%;
 }
 
+.organizer-events-page h1, .organizer-events-page h2 {
+    text-align: left;
+}
+
 .filters {
     display: flex;
     gap: 10px;
@@ -174,14 +178,13 @@ export default {
 }
 
 .upcoming-events, .past-events {
-    margin-bottom: 40px;
+    margin: 40px 0px 40px 0px;
 
 }
 
 .event-cards {
     display: flex;
-    flex-wrap: wrap;
-    gap: 62px;
+    justify-content:space-between;
 }
 
 
