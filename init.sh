@@ -12,5 +12,8 @@ ls -la /app/Backend/database
 # Run Laravel migrations
 php artisan migrate --force
 
+# List contents of the database directory again to confirm the database file is created
+ls -la /app/Backend/database
+
 # Start the Laravel server
 php artisan serve --host=0.0.0.0 --port=8000
