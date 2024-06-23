@@ -42,5 +42,4 @@ echo "Contents of /app/Backend/database after migration:"
 ls -la /app/Backend/database
 
 # Start the Laravel server
-php artisan serve --host=0.0.0.0 --port=8000
-
+php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
