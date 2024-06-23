@@ -14,8 +14,8 @@ RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
 
 COPY Backend/ .
 
-# Ensure the .env file is present before running artisan commands
-COPY Backend/.env /app/Backend/.env
+# Copy the .env.example file and rename it to .env
+RUN cp /app/Backend/.env.example /app/Backend/.env
 
 # Debugging step to verify .env file is copied
 RUN ls -la /app/Backend
@@ -29,8 +29,11 @@ COPY --from=frontend /app/Frontend/dist /app/Backend/public
 FROM php:8.0-fpm-alpine
 WORKDIR /app/Backend
 COPY --from=backend /app/Backend /app/Backend
-RUN apk --no-cache add sqlite pcre-dev
-RUN docker-php-ext-install pdo pdo_sqlite
+
+# Install necessary dependencies for pdo_sqlite
+RUN apk --no-cache add sqlite pcre-dev \
+    && docker-php-ext-install pdo pdo_sqlite
+
 COPY init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/init.sh
 
