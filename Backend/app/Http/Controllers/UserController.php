@@ -57,22 +57,30 @@ class UserController extends Controller
 }
 
 
-    public function login(Request $request)
+public function login(Request $request)
+{
+    $validatedData = $request->validate([
+        'username' => 'required|string',
+        'password' => 'required|string',
+    ]);
+
+    $user = User::where('email', $validatedData['username'])
+                ->orWhere('phone', $validatedData['username'])
+                ->first();
+
+    if ($user && Hash::check($validatedData['password'], $user->password)) {
+        // Create a token for the user
+        $token = $user->createToken('YourAppName')->plainTextToken;
+
+        return response()->json(['id' => $user->id, 'token' => $token], 200);
+    }
+
+    return response()->json(['message' => 'Invalid credentials'], 401);
+}
+    public function logout(Request $request)
     {
-        $validatedData = $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        $user = User::where('email', $validatedData['username'])
-            ->orWhere('phone', $validatedData['username'])
-            ->first();
-
-        if ($user && Hash::check($validatedData['password'], $user->password)) {
-            return response()->json(['id' => $user->id], 200);
-        }
-
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Successfully logged out'], 200);
     }
 
     public function show($id)
