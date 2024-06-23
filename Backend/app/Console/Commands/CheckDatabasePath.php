@@ -22,6 +22,9 @@ class CheckDatabasePath extends Command
             $this->info("Database file exists.");
         } else {
             $this->error("Database file does not exist.");
+            $this->info("Current working directory: " . getcwd());
+            $this->info("Listing of the database directory:");
+            system('ls -la ' . dirname($databasePath));
         }
     }
 }
