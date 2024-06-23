@@ -56,7 +56,7 @@ RUN chmod +x /app/Backend/init.sh
 RUN ls -la /app/Backend
 
 WORKDIR /app/Backend
-CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
 
 
 
