@@ -56,4 +56,12 @@ COPY init.sh /usr/local/bin/init.sh
 
 RUN chmod +x /usr/local/bin/init.sh
 
+# Ensure the database directory exists and set permissions
+RUN mkdir -p /app/Backend/database
+RUN chmod -R 755 /app/Backend/database
+
+# Create the SQLite database file and set permissions
+RUN touch /app/Backend/database/database.sqlite
+RUN chmod 644 /app/Backend/database/database.sqlite
+
 CMD ["sh", "/usr/local/bin/init.sh"]
