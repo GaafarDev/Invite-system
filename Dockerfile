@@ -4,9 +4,11 @@ FROM node:14 as frontend
 WORKDIR /app/Frontend
 
 COPY Frontend/package*.json ./
+
 RUN npm install
 
 COPY Frontend/ .
+
 RUN npm run build
 
 # Stage 2: Build the backend
@@ -15,6 +17,7 @@ FROM composer:2 as backend
 WORKDIR /app/Backend
 
 COPY Backend/composer.json Backend/composer.lock ./
+
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
 
 COPY Backend/ .
@@ -48,7 +51,6 @@ RUN apk info
 # Debugging step to check available PHP extensions
 RUN php -m
 
-# Copy init.sh and make it executable
 # Copy init.sh to the backend directory
 COPY init.sh /app/Backend/
 
@@ -56,10 +58,4 @@ COPY init.sh /app/Backend/
 RUN chmod +x /app/Backend/init.sh
 
 
-# Debugging step to list contents of /app/Backend
-RUN ls -la /app/Backend
-
-CMD ["sh", "-c", "init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
-
-
-
+CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
