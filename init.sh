@@ -16,19 +16,13 @@ cat /app/Backend/.env
 # Debugging: Print the Laravel database configuration
 php artisan config:clear
 php artisan config:cache
-php artisan config:show | grep DB_
+
+# Debugging: Check the SQLite database path configuration
+php artisan db:check-path
 
 # Debugging: List contents of the database directory
 echo "Contents of /app/Backend/database before migration:"
 ls -la /app/Backend/database
-
-# Verify the existence and contents of the database file
-echo "Database file content:"
-cat /app/Backend/database/database.sqlite
-
-# Verify the file path is correct
-echo "Verifying database file path in Laravel configuration:"
-php -r "echo config('database.connections.sqlite.database');"
 
 # Run Laravel migrations
 php artisan migrate --force
