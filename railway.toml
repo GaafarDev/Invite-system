@@ -2,7 +2,7 @@
 
 [env]
 DB_CONNECTION = "sqlite"
-DB_DATABASE = "/app/backend/database/database.sqlite"
+DB_DATABASE = "/app/backend/database.sqlite"
 
 [build]
 builder = "dockerfile"
