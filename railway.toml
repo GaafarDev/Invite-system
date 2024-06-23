@@ -1,8 +1,6 @@
-# railway.toml
-
 [env]
 DB_CONNECTION = "sqlite"
-DB_DATABASE = "/app/backend/database.sqlite"
+DB_DATABASE = "Backend/database/database.sqlite"
 
 [build]
 builder = "dockerfile"
