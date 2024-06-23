@@ -58,7 +58,7 @@ class EventController extends Controller
 public function upcoming(Request $request, $userId)
 {
     try {
-        // Validate if userId is numeric (optional, depends on your application's logic)
+        // Validate if userId is numeric
         if (!is_numeric($userId)) {
             return response()->json(['message' => 'Invalid user ID'], 400);
         }
@@ -66,16 +66,27 @@ public function upcoming(Request $request, $userId)
         // Retrieve all ticket sales for the user
         $ticketSales = TicketSale::where('user_id', $userId)->get();
 
-        // Initialize an empty array to store unique events
+        // Retrieve all accepted invitations for the user
+        $acceptedInvitations = Invitation::where('user_id', $userId)
+                                          ->whereIn('status', ['accepted', 'Accepted'])
+                                          ->get();
+
+        // Initialize an empty array to store events
         $events = [];
 
         // Iterate through each TicketSale to get the associated Event
         foreach ($ticketSales as $ticketSale) {
             $ticket = Ticket::find($ticketSale->ticket_id);
-
-            // If the ticket exists and has an event, add it to the events array
             if ($ticket && $ticket->event) {
                 $events[] = $ticket->event;
+            }
+        }
+
+        // Iterate through each Invitation to get the associated Event
+        foreach ($acceptedInvitations as $invitation) {
+            $event = Event::find($invitation->event_id);
+            if ($event) {
+                $events[] = $event;
             }
         }
 
@@ -84,9 +95,7 @@ public function upcoming(Request $request, $userId)
 
         return response()->json($uniqueEvents, 200);
     } catch (\Exception $e) {
-        // Log the exception message for debugging
         \Log::error('Error in upcoming method: ' . $e->getMessage());
-        // Return a generic error response
         return response()->json(['message' => 'Internal Server Error'], 500);
     }
 }
