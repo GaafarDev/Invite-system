@@ -13,8 +13,12 @@ COPY Backend/composer.json Backend/composer.lock ./
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
 COPY Backend/ .
 
-# Copy the .env file before running any artisan commands
+# Ensure the .env file is present before running artisan commands
 COPY Backend/.env /app/Backend/.env
+
+# Debugging step to verify .env file is copied
+RUN ls -la /app/Backend
+
 RUN php artisan key:generate
 
 # Copy the built frontend to the backend's public directory
