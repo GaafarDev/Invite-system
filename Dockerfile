@@ -1,15 +1,23 @@
 # Stage 1: Build the frontend
 FROM node:14 as frontend
+
 WORKDIR /app/Frontend
+
 COPY Frontend/package*.json ./
+
 RUN npm install
+
 COPY Frontend/ .
+
 RUN npm run build
 
 # Stage 2: Build the backend
 FROM composer:2 as backend
+
 WORKDIR /app/Backend
+
 COPY Backend/composer.json Backend/composer.lock ./
+
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
 
 COPY Backend/ .
@@ -27,18 +35,20 @@ COPY --from=frontend /app/Frontend/dist /app/Backend/public
 
 # Stage 3: Set up the final image
 FROM php:8.0-fpm-alpine
+
 WORKDIR /app/Backend
+
 COPY --from=backend /app/Backend /app/Backend
 
 # Install necessary dependencies for pdo_sqlite and build tools
-RUN apk --no-cache add sqlite pcre-dev \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
+RUN apk --no-cache add sqlite pcre-dev $PHPIZE_DEPS
 
 # Debugging step to check installed packages
 RUN apk info
 
 # Install PHP extensions with verbose logging
-RUN docker-php-ext-install -j$(nproc) pdo pdo_sqlite
+RUN docker-php-ext-configure pdo_sqlite --with-pdo-sqlite=/usr && \
+    docker-php-ext-install -j$(nproc) pdo pdo_sqlite
 
 # Debugging step to check available PHP extensions
 RUN php -m
