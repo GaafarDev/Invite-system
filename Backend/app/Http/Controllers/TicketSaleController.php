@@ -36,5 +36,25 @@ class TicketSaleController extends Controller
         $ticketSales = TicketSale::where('user_id', $userId)->get();
         return response()->json($ticketSales, 200);
     }
+
+    public function getByTicketId($ticketId)
+    {
+        try {
+            // Validate if ticketId is numeric
+            if (!is_numeric($ticketId)) {
+                return response()->json(['message' => 'Invalid ticket ID'], 400);
+            }
+
+            // Retrieve all ticket sales for the given ticket ID
+            $ticketSales = TicketSale::where('ticket_id', $ticketId)->get();
+
+            return response()->json($ticketSales, 200);
+        } catch (\Exception $e) {
+            // Log the exception message for debugging
+            \Log::error('Error in getByTicketId method: ' . $e->getMessage());
+            // Return a generic error response
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+    }
 }
 

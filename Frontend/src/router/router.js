@@ -7,6 +7,7 @@ import OrganizerEventsPage from '../components/OrganizerEventsPage.vue';
 import CreateEventPage from '../components/CreateEventPage.vue';
 import OrganizerViewEventPage from '../components/OrganizerViewEventPage.vue';
 import SendInvitationPage from '../components/SendInvitationPage.vue';
+import FinancePage from '../components/FinancePage.vue';
 import LoginPage from '../components/LoginPage.vue';
 import SignupPage from '../components/SignupPage.vue';
 
@@ -21,6 +22,8 @@ const routes = [
     { path: '/create-event', component: CreateEventPage },
     { path: '/organizer-view-event', component: OrganizerViewEventPage },
     { path: '/send-invitation', component: SendInvitationPage, name: 'SendInvitation' },
+    {path: '/finance',  component: FinancePage, name: 'FinancePage'},
+
 ];
 
 const router = createRouter({
