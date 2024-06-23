@@ -55,4 +55,4 @@ RUN chmod +x /app/Backend/init.sh
 # Debugging step to list contents of /app/Backend
 RUN ls -la /app/Backend
 
-CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
