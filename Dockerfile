@@ -11,7 +11,14 @@ FROM composer:2 as backend
 WORKDIR /app/Backend
 COPY Backend/composer.json Backend/composer.lock ./
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
+
+# Debugging step to list files in Backend directory
+RUN ls -la /app/Backend
+
 COPY Backend/ .
+
+# Debugging step to list files in Backend directory after copying
+RUN ls -la /app/Backend
 
 # Ensure the .env file is present before running artisan commands
 COPY Backend/.env /app/Backend/.env
