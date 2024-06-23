@@ -27,19 +27,8 @@ cat /app/Backend/.env
 php artisan config:clear
 php artisan config:cache
 
-# Debugging: Check the SQLite database path configuration
-php artisan db:check-path
-
-# Debugging: List contents of the database directory
-echo "Contents of /app/Backend/database before migration:"
-ls -la /app/Backend/database
-
 # Run Laravel migrations
 php artisan migrate --force
-
-# Debugging: List contents of the database directory again to confirm the database file is created
-echo "Contents of /app/Backend/database after migration:"
-ls -la /app/Backend/database
 
 # Start the Laravel server
 php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
