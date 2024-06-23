@@ -5,23 +5,11 @@ DB_CONNECTION = "sqlite"
 DB_DATABASE = "/app/backend/database/database.sqlite"
 
 [build]
-  # Step 1: Install dependencies for the backend
-  [build.env]
-    POST_BUILD = "composer install --no-dev --working-dir=backend && php backend/artisan key:generate"
-
-  # Step 2: Install dependencies and build the frontend
-  [build.env]
-    POST_BUILD = "npm install --prefix frontend && npm run build --prefix frontend"
-
-  # Step 3: Initialize the database
-  [build.env]
-    POST_BUILD = "bash init.sh"
+steps = [
+  "cd backend && composer install --no-dev --no-interaction --prefer-dist",
+  "cd frontend && npm install && npm run build",
+  "bash init.sh"
+]
 
 [start]
-  # Start the Laravel backend
-  [start.env]
-    CMD = "php backend/artisan serve --host=0.0.0.0 --port=8000"
-
-  # Serve the built frontend
-  [start.env]
-    CMD = "npx serve -s frontend/dist"
+cmd = "php backend/artisan serve --host=0.0.0.0 --port=8000 & npx serve -s frontend/dist -l 5000"
