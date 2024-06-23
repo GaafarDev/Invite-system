@@ -45,7 +45,7 @@
 
 <script>
 import TextField from './TextField.vue';
-import axios from 'axios';
+import apiClient from '@/api.js';  // Use the configured axios instance
 
 export default {
   name: 'SignupPage',
@@ -66,7 +66,7 @@ export default {
   methods: {
     async signup() {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/signup', {
+        const response = await apiClient.post('/signup', {
           fullname: this.fullName,
           email: this.email,
           phone: this.phoneNumber,
