@@ -51,12 +51,7 @@ RUN apk info
 # Debugging step to check available PHP extensions
 RUN php -m
 
-# Copy init.sh to the backend directory
-COPY init.sh /app/Backend/
+COPY init.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/init.sh
 
-# Update the permissions of init.sh
-RUN chmod +x /app/Backend/init.sh
-
-
-CMD ["sh", "-c", "/app/Backend/init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
-
+CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
