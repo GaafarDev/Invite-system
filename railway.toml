@@ -13,6 +13,10 @@ DB_DATABASE = "/app/backend/database/database.sqlite"
   [build.env]
     POST_BUILD = "npm install --prefix frontend && npm run build --prefix frontend"
 
+  # Step 3: Initialize the database
+  [build.env]
+    POST_BUILD = "bash init.sh"
+
 [start]
   # Start the Laravel backend
   [start.env]
