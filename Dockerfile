@@ -22,7 +22,8 @@ COPY --from=frontend /app/Frontend/dist /app/Backend/public
 FROM php:8.0-fpm-alpine
 WORKDIR /app/Backend
 COPY --from=backend /app/Backend /app/Backend
-RUN apk --no-cache add sqlite
+RUN apk --no-cache add sqlite pcre-dev
+RUN docker-php-ext-install pdo pdo_sqlite
 COPY init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/init.sh
 
