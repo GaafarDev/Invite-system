@@ -31,8 +31,16 @@ WORKDIR /app/Backend
 COPY --from=backend /app/Backend /app/Backend
 
 # Install necessary dependencies for pdo_sqlite
-RUN apk --no-cache add sqlite pcre-dev \
-    && docker-php-ext-install pdo pdo_sqlite
+RUN apk --no-cache add sqlite pcre-dev
+
+# Debugging step to check installed packages
+RUN apk info
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_sqlite
+
+# Debugging step to check available PHP extensions
+RUN php -m
 
 COPY init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/init.sh
