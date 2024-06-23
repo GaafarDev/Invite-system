@@ -7,6 +7,7 @@ import OrganizerEventsPage from '../components/OrganizerEventsPage.vue';
 import CreateEventPage from '../components/CreateEventPage.vue';
 import OrganizerViewEventPage from '../components/OrganizerViewEventPage.vue';
 import SendInvitationPage from '../components/SendInvitationPage.vue';
+import ProfilePage from '../components/ProfilePage.vue';
 
 const routes = createRouter({
     history: createWebHistory(),
@@ -19,6 +20,7 @@ const routes = createRouter({
         {path: '/create-event',  component: CreateEventPage},
         {path: '/organizer-view-event',  component: OrganizerViewEventPage},
         {path: '/send-invitation',  component: SendInvitationPage, name: 'SendInvitation'},
+        {path: '/profile',  component: ProfilePage},
     ]
 });
 
