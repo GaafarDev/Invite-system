@@ -1,14 +1,16 @@
 <?php
+// config/cors.php
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['http://localhost:3000','http://localhost:8080'],  // Ensure this matches your Vue.js server URL
+    'allowed_origins' => ['https://invite-system-production.up.railway.app'],
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
     'max_age' => 0,
     'supports_credentials' => true,
 ];
+
 
 
 
