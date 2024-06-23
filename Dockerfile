@@ -1,5 +1,5 @@
 # Stage 1: Build the frontend
-FROM node:14.17.0 as frontend
+FROM node:14 as frontend
 WORKDIR /app/Frontend
 COPY Frontend/package*.json ./
 RUN npm install
@@ -7,7 +7,7 @@ COPY Frontend/ .
 RUN npm run build
 
 # Stage 2: Build the backend
-FROM composer:2.1 as backend
+FROM composer:2 as backend
 WORKDIR /app/Backend
 COPY Backend/composer.json Backend/composer.lock ./
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
@@ -18,7 +18,7 @@ RUN php artisan key:generate
 COPY --from=frontend /app/Frontend/dist /app/Backend/public
 
 # Stage 3: Set up the final image
-FROM php:8.0.6-fpm-alpine
+FROM php:8.0-fpm-alpine
 WORKDIR /app/Backend
 COPY --from=backend /app/Backend /app/Backend
 RUN apk --no-cache add sqlite
