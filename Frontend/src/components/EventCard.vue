@@ -23,7 +23,7 @@
                     <li>
                         <p>
                             <span class="price"><img src = "../assets/Icons/ticketCard.png" alt = "ticket"/>{{ eventPrice }}</span>
-                            <span class="interested"><img src = "../assets/Icons/starCard.png" alt = "ticket"/>{{ eventInterested }} interested</span>
+                            <span class="interested"><img src = "../assets/Icons/starCard.png" alt = "Interest"/>{{ eventInterested }} interested</span>
                         </p>
                     </li>
                 </ul>

@@ -185,6 +185,7 @@ export default {
 .event-cards {
     display: flex;
     justify-content:space-between;
+    align-items: left;
 }
 
 

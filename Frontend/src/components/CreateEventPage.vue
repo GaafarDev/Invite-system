@@ -520,4 +520,10 @@ export default {
 .review-details .ticket-information .ticket-item span {
   font-size: 1rem;
 }
+
+.icon {
+  margin-right: 10px;
+  width: 24px;
+  height: 24px;
+}
 </style>

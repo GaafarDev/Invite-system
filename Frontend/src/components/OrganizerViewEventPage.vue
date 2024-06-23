@@ -53,6 +53,11 @@
           <h3>Interests</h3>
           <p>{{ eventDetails.interests.length }} people are interested</p>
         </div>
+
+        <!-- Send Invitation Button -->
+        <div class="button-group">
+          <button @click="sendInvitation">Send Invitation</button>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -92,6 +97,14 @@ export default {
         .catch(error => {
           console.error("Error fetching event details:", error);
         });
+    },
+    sendInvitation() {
+      this.$router.push({
+        name: 'SendInvitation',
+        query: {
+          eventId: this.$route.params.eventId
+        }
+      });
     }
   },
   created() {
