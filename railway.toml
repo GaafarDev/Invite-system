@@ -1,15 +1,4 @@
 # railway.toml
 
-[env]
-DB_CONNECTION = "sqlite"
-DB_DATABASE = "/app/backend/database/database.sqlite"
-
 [build]
-steps = [
-  "cd backend && composer install --no-dev --no-interaction --prefer-dist",
-  "cd frontend && npm install && npm run build",
-  "bash init.sh"
-]
-
-[start]
-cmd = "php backend/artisan serve --host=0.0.0.0 --port=8000 & npx serve -s frontend/dist -l 5000"
+builder = "dockerfile"
