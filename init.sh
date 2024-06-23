@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Ensure the database directory exists
-mkdir -p /app/Backend/database
-
 # Create the SQLite database file
-touch /app/Backend/database/database.sqlite
+touch /Backend/database/database.sqlite
 
 # List contents of the database directory
 ls -la /app/Backend/database
