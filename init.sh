@@ -1,11 +1,10 @@
-# init.sh
 #!/bin/bash
 
 # Ensure the database directory exists
 mkdir -p /app/Backend/database
 
 # Debugging: List the directory before creating the database file
-echo "Before touching the database.sqlite:"
+echo "Before creating the database.sqlite:"
 ls -la /app/Backend/database
 
 # Create the SQLite database file if it does not exist
@@ -17,7 +16,7 @@ fi
 chmod 777 /app/Backend/database/database.sqlite
 
 # Debugging: List the directory after creating the database file
-echo "After touching the database.sqlite:"
+echo "After creating the database.sqlite:"
 ls -la /app/Backend/database
 
 # Debugging: Print the contents of the .env file
@@ -44,3 +43,4 @@ ls -la /app/Backend/database
 
 # Start the Laravel server
 php artisan serve --host=0.0.0.0 --port=8000
+
