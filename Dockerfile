@@ -1,16 +1,22 @@
 # Stage 1: Build the frontend
 FROM node:14 as frontend
+
 WORKDIR /app/Frontend
+
 COPY Frontend/package*.json ./
 RUN npm install
+
 COPY Frontend/ .
 RUN npm run build
 
 # Stage 2: Build the backend
 FROM composer:2 as backend
+
 WORKDIR /app/Backend
+
 COPY Backend/composer.json Backend/composer.lock ./
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
+
 COPY Backend/ .
 
 # Copy the .env.example file and rename it to .env
@@ -26,7 +32,9 @@ COPY --from=frontend /app/Frontend/dist /app/Backend/public
 
 # Stage 3: Set up the final image
 FROM php:8.0-fpm-alpine
+
 WORKDIR /app/Backend
+
 COPY --from=backend /app/Backend /app/Backend
 
 # Install necessary dependencies for pdo_sqlite and build tools
@@ -40,7 +48,11 @@ RUN apk info
 # Debugging step to check available PHP extensions
 RUN php -m
 
-COPY init.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/init.sh
+# Copy init.sh and make it executable
+COPY init.sh /app/Backend/init.sh
+RUN chmod +x /app/Backend/init.sh
+
+# Debugging step to list contents of /app/Backend
+RUN ls -la /app/Backend
 
 CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
