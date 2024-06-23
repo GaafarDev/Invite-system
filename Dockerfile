@@ -34,7 +34,7 @@ RUN php artisan key:generate
 COPY --from=frontend /app/Frontend/dist /app/Backend/public
 
 # Stage 3: Set up the final image
-FROM php:8.0-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 WORKDIR /app/Backend
 
