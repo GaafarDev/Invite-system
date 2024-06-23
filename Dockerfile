@@ -56,5 +56,4 @@ COPY init.sh /usr/local/bin/init.sh
 
 RUN chmod +x /usr/local/bin/init.sh
 
-# Use the PORT environment variable for the application
-CMD ["sh", "-c", "/usr/local/bin/init.sh"]
+CMD ["sh", "/usr/local/bin/init.sh"]
