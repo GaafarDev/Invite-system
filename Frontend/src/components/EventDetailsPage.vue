@@ -9,7 +9,7 @@
 
         <div class="details">
         <h1>{{ eventDetails.title }}</h1>
-
+        
         <div class="date-time-section">
           <h3>Date and Time</h3>
           <div class="date-time">
@@ -36,6 +36,7 @@
           <p>{{ eventDetails.description }}</p>
         </div>
 
+        <!-- Tickets -->
         <div class="tickets-section">
           <h3>Tickets</h3>
           <ul>
@@ -45,32 +46,45 @@
           </ul>
         </div>
 
-        <div class="interests-and-invite">
-        <div class="interests-section">
-          <h3>Interests</h3>
-          <p>{{ eventDetails.interests.length }} people are interested</p>
+        <!-- Interests and Buy Ticket Button -->
+        <div class="interests-and-buy">
+          <div class="interests-section">
+            <h3>Interests</h3>
+            <p>{{ eventDetails.interests.length }} people are interested</p>
+          </div>
+          <button class="buy-ticket-button" @click="openBuyTicketPopout">
+            <img src = "../assets/Icons/ticketCard.png" alt = "ticket"/>
+            Buy Ticket
+          </button>
         </div>
-        <button @click="sendInvitation">
-          <img src = "../assets/Icons/send_invitation.png" alt = "ticket"/>
-          Send Invitation
-        </button>
-      </div>
       </div>
     </div>
     </div>
     <div v-else>
       <p>Loading...</p>
     </div>
+
+    <BuyTicket
+      v-if="showBuyTicketPopout"
+      :tickets="eventDetails.tickets"
+      @close="closeBuyTicketPopout"
+      @purchase="buyTicket"
+    />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import BuyTicket from './BuyTicket.vue';
 
 export default {
+  components: {
+    BuyTicket
+  },
   data() {
     return {
-      eventDetails: null
+      eventDetails: null,
+      showBuyTicketPopout: false
     };
   },
   methods: {
@@ -91,32 +105,27 @@ export default {
       axios.get(`http://127.0.0.1:8000/api/events/${eventId}`)
         .then(response => {
           this.eventDetails = response.data;
+          this.eventDetails.tickets.forEach(ticket => ticket.quantity = 0);
         })
         .catch(error => {
           console.error("Error fetching event details:", error);
         });
     },
-    inviteParticipant(ticketId) {
-      const payload = {
-        organizer_id: 1,  // Replace with actual organizer ID
-        ticket_id: ticketId
-        // Additional details as required
-      };
-      axios.post(`http://127.0.0.1:8000/api/inviteparticipant`, payload)
+    openBuyTicketPopout() {
+      this.showBuyTicketPopout = true;
+    },
+    closeBuyTicketPopout() {
+      this.showBuyTicketPopout = false;
+    },
+    buyTicket(payload) {
+      axios.post(`http://127.0.0.1:8000/api/ticketsales`, payload)
         .then(() => {
-          alert("Participant invited successfully!");
+          alert("Ticket purchased successfully!");
+          this.closeBuyTicketPopout();
         })
         .catch(error => {
-          console.error("Error inviting participant:", error);
+          console.error("Error purchasing ticket:", error);
         });
-    },
-    sendInvitation() {
-      this.$router.push({
-        name: 'SendInvitation',
-        query: {
-          eventId: this.$route.params.eventId
-        }
-      });
     }
   },
   created() {
@@ -170,7 +179,13 @@ h3 {
   margin-bottom: 10px;
 }
 
-button {
+.interests-and-buy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buy-ticket-button {
   padding: 10px 20px;
   background-color: #FFE047;
   color: black;
@@ -180,16 +195,10 @@ button {
   font-weight: bold;
 }
 
-button img{
+.buy-ticket-button img{
   height: auto;
   width: 20px;
   padding-right:5px;
   padding-top:3px;
-}
-
-.interests-and-invite {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 </style>
