@@ -13,7 +13,7 @@ chmod 777 /app/Backend/database/database.sqlite
 echo "Contents of .env file:"
 cat /app/Backend/.env
 
-# Debugging: Print the Laravel database configuration
+# Debugging: Clear and cache the Laravel configuration
 php artisan config:clear
 php artisan config:cache
 
