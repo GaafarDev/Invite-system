@@ -1,15 +1,20 @@
 #!/bin/bash
 
-# Create the SQLite database file
-touch /Backend/database/database.sqlite
+# Ensure the database directory exists
+mkdir -p /app/Backend/database
 
-# List contents of the database directory
+# Create the SQLite database file
+touch /app/Backend/database/database.sqlite
+
+# Debugging: List contents of the database directory
+echo "Contents of /app/Backend/database before migration:"
 ls -la /app/Backend/database
 
 # Run Laravel migrations
 php artisan migrate --force
 
-# List contents of the database directory again to confirm the database file is created
+# Debugging: List contents of the database directory again to confirm the database file is created
+echo "Contents of /app/Backend/database after migration:"
 ls -la /app/Backend/database
 
 # Start the Laravel server
