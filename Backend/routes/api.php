@@ -8,6 +8,12 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\InterestController;
 
 Route::middleware('api')->group(function () {
+
+    // Add this to your api.php to verify the base URL is working
+Route::get('test', function () {
+    return response()->json(['message' => 'API is working!']);
+});
+
     // User routes
     Route::get('users', [UserController::class, 'index']); // Get all users
     Route::post('signup', [UserController::class, 'signup']);
@@ -47,4 +53,5 @@ Route::middleware('api')->group(function () {
     Route::post('interests', [InterestController::class, 'store']);
     Route::delete('interests', [InterestController::class, 'destroy']);
 });
+
 
