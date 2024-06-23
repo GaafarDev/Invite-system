@@ -49,10 +49,14 @@ RUN apk info
 RUN php -m
 
 # Copy init.sh and make it executable
-COPY init.sh Backend/init.sh
-RUN chmod +x Backend/init.sh
+COPY init.sh /app/Backend/init.sh
+RUN chmod +x /app/Backend/init.sh
 
 # Debugging step to list contents of /app/Backend
 RUN ls -la /app/Backend
 
-CMD ["sh", "-c", "Backend/init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
+WORKDIR /app/Backend
+CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
+
+
+
