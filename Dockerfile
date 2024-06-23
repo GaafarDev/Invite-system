@@ -43,4 +43,4 @@ RUN php -m
 COPY init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/init.sh
 
-CMD ["sh", "-c", "init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "./init.sh && php artisan serve --host=0.0.0.0 --port=8000"]
