@@ -172,6 +172,7 @@ export default {
   width: 500px;
   border: none;
   border-radius: 5px 0 0 5px;
+  color : black;
 }
 
 .search-bar button {
