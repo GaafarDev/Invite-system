@@ -30,14 +30,15 @@ FROM php:8.0-fpm-alpine
 WORKDIR /app/Backend
 COPY --from=backend /app/Backend /app/Backend
 
-# Install necessary dependencies for pdo_sqlite
-RUN apk --no-cache add sqlite pcre-dev
+# Install necessary dependencies for pdo_sqlite and build tools
+RUN apk --no-cache add sqlite pcre-dev \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
 
 # Debugging step to check installed packages
 RUN apk info
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_sqlite
+# Install PHP extensions with verbose logging
+RUN docker-php-ext-install -j$(nproc) pdo pdo_sqlite
 
 # Debugging step to check available PHP extensions
 RUN php -m
