@@ -36,6 +36,7 @@ Route::middleware('api')->group(function () {
     Route::get('ticketsales', [TicketSaleController::class, 'index']); // Get all ticket sales
     Route::post('ticketsales', [TicketSaleController::class, 'store']);
     Route::get('users/{userId}/ticket-sales', [TicketSaleController::class, 'userTicketSales']); // Route added for user ticket sales
+    Route::get('ticketsales/ticket/{ticketId}', [TicketSaleController::class, 'getByTicketId']);
 
     // Ticket routes
     Route::get('tickets', [TicketController::class, 'index']); // Get all tickets
