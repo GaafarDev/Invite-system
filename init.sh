@@ -26,6 +26,10 @@ ls -la /app/Backend/database
 echo "Database file content:"
 cat /app/Backend/database/database.sqlite
 
+# Verify the file path is correct
+echo "Verifying database file path in Laravel configuration:"
+php -r "echo config('database.connections.sqlite.database');"
+
 # Run Laravel migrations
 php artisan migrate --force
 
