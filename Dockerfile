@@ -41,10 +41,9 @@ WORKDIR /app/Backend
 COPY --from=backend /app/Backend /app/Backend
 
 # Install necessary dependencies for pdo_sqlite and build tools
-RUN apk --no-cache add sqlite pcre-dev \
-    && apk add --no-cache --virtual .build-deps autoconf g++ make \
-    && docker-php-ext-install pdo_sqlite \
-    && apk del .build-deps
+RUN apk update && apk add --no-cache sqlite-dev pcre-dev $PHPIZE_DEPS \
+    && docker-php-ext-install pdo pdo_sqlite \
+    && apk del $PHPIZE_DEPS
 
 # Debugging step to check installed packages
 RUN apk info
