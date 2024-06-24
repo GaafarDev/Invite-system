@@ -3,7 +3,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const apiClient = axios.create({
-  baseURL: 'https://invite-system-production.up.railway.app/api',  // Updated URL
+  baseURL: import.meta.env.VITE_API_BASE_URL,  // Use the environment variable
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
