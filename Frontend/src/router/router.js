@@ -11,22 +11,21 @@ import ProfilePage from '../components/ProfilePage.vue';
 import EventlistByCategory from '../components/EventlistByCategory.vue';
 
 const routes = [
-    { path: '/', component: HomePage },
-    { path: '/events', component: EventsPage },
-    { path: '/map', component: MapPage },
-    { path: '/invitations', component: InvitationsPage },
-    { path: '/organizer-events', component: OrganizerEventsPage },
-    { path: '/create-event', component: CreateEventPage },
-    { path: '/organizer-view-event', component: OrganizerViewEventPage },
-    { path: '/send-invitation', component: SendInvitationPage, name: 'SendInvitation' },
-    { path: '/profile', component: ProfilePage },
-    { path: '/events/category/:categoryName', component: EventlistByCategory, name: 'EventListByCategory' },
-
+  { path: '/', component: HomePage },
+  { path: '/events', component: EventsPage },
+  { path: '/map', component: MapPage },
+  { path: '/invitations', component: InvitationsPage },
+  { path: '/organizer-events', component: OrganizerEventsPage },
+  { path: '/create-event', component: CreateEventPage },
+  { path: '/organizer-view-event', component: OrganizerViewEventPage },
+  { path: '/send-invitation', component: SendInvitationPage, name: 'SendInvitation' },
+  { path: '/profile', component: ProfilePage },
+  { path: '/events/category/:categoryName', component: EventlistByCategory, name: 'EventListByCategory' },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes
+  history: createWebHistory(),
+  routes
 });
 
 export default router;
