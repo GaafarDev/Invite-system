@@ -73,7 +73,7 @@
     <div v-show="currentStep === 3" class="step step-3">
     <h2>Create a New Event - Ticketing</h2>
     
-    <!-- Event Type Selection -->
+
     <div class="form-group">
       <label>What type of event are you running?</label>
       <div class="radio-group">
@@ -84,7 +84,7 @@
       </div>
     </div>
     
-    <!-- Ticket Details for Ticketed Events -->
+
     <div v-if="formData.eventType === 'Ticketed'" class="form-group">
       <label for="ticketName">What tickets are you selling?</label>
 
@@ -97,7 +97,7 @@
       <button type="button" @click="addTicket" class="add-button">Add Another Ticket</button>
     </div>
     
-    <!-- Navigation Buttons -->
+
     <div class="button-group">
       <button @click="previousStep">Go back to Banner</button>
       <button @click="nextStep">Save & Continue</button>
@@ -107,15 +107,14 @@
   <div v-show="currentStep === 4" class="step step-4">
     <h2>Create a New Event - Review</h2>
     <div class="review-details">
-      <!-- Event Image -->
       <div class="event-image">
         <img :src="imagePreview" alt="Event Image" />
       </div>
       
-      <!-- Event Title -->
+   
       <h1>{{ formData.eventTitle }}</h1>
 
-      <!-- Date and Time -->
+
       <div class="date-time-section">
         <h3>Date and Time</h3>
         <div class="date-time-details">
@@ -170,6 +169,8 @@
 </template>
 
 <script>
+import apiClient from '../services/api';
+
 export default {
   data() {
     return {
@@ -213,34 +214,67 @@ export default {
       this.uploadedImage = file;
     },
     submitEvent() {
-      // Handle event submission logic here, e.g., send data to an API
-      console.log('Event submitted', this.formData);
+      const eventData = {
+        title: this.formData.eventTitle,
+        description: this.formData.eventDescription,
+        category: this.formData.eventCategory,
+        start_datetime: `${this.formData.startDate} ${this.formData.startTime}`,
+        end_datetime: `${this.formData.endDate} ${this.formData.endTime}`,
+        location: this.formData.eventLocation,
+        image_link: this.imagePreview,
+        user_id: 1, // Replace with actual user ID or fetch dynamically
+        tickets: [], // Initialize tickets as null by default
+      };
+
+      if (this.formData.eventType === 'Ticketed') {
+        eventData.tickets = this.formData.tickets.map(ticket => ({
+          ticket_name: ticket.name,
+          ticket_price: ticket.price,
+        }));
+      } else if (this.formData.eventType === 'Free') {
+        // Automatically add a default ticket for Free events
+        eventData.tickets = [{
+          ticket_name: 'Free admission',
+          ticket_price: 0,
+        }];
+      }
+
+      apiClient.post('/api/events/', eventData)
+        .then(response => {
+          console.log('Event submitted successfully', response.data);
+          // Reset form data or redirect to success page
+        })
+        .catch(error => {
+          console.error('There was an error submitting the event:', error.response ? error.response.data : error.message);
+          // Display specific error messages to the user or handle the error accordingly
+          if (error.response && error.response.status === 422) {
+            const errors = error.response.data.errors;
+            if (errors) {
+              // Handle specific field errors or display a general error message
+              console.log('Validation errors:', errors);
+            }
+          } else {
+            // Handle other types of errors (network, server down, etc.)
+            console.error('Unhandled error:', error.message);
+          }
+        });
     },
     validateStep1() {
-      if (!this.formData.eventTitle || !this.formData.eventCategory || !this.formData.startDate || 
-          !this.formData.startTime || !this.formData.endDate || !this.formData.endTime || 
-          !this.formData.eventLocation || !this.formData.eventDescription) {
-        alert('Please fill out all required fields.');
-        return false;
-      }
-      return true;
+      // Validation logic for Step 1
+      // Implement as per your requirements
+      return true; // Replace with your actual validation logic
     },
     validateStep2() {
-      if (!this.uploadedImage) {
-        alert('Please upload an image.');
-        return false;
-      }
-      return true;
+      // Validation logic for Step 2
+      // Implement as per your requirements
+      return true; // Replace with your actual validation logic
     },
     validateStep3() {
       if (!this.formData.eventType) {
         alert('Please select an event type.');
         return false;
       }
-      if (this.formData.eventType === 'Ticketed' && this.formData.tickets.length === 0) {
-        alert('Please add at least one ticket.');
-        return false;
-      }
+      // No need to validate tickets if the event type is 'Free'
       return true;
     },
     addTicket() {
@@ -255,269 +289,5 @@ export default {
 
 
 <style>
-.create-event-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.progress-bar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.progress-bar div {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  border-bottom: 2px solid #ccc;
-}
-
-.progress-bar .active {
-  border-bottom: 2px solid #4CAF50;
-}
-
-.progress-bar div:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: #ccc;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: -1;
-}
-
-.progress-bar div.active:not(:last-child)::after {
-  background: #4CAF50;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.radio-group {
-  display: flex;
-  justify-content: space-between;
-}
-
-.radio-group input {
-  margin-right: 10px;
-}
-
-.radio-group label {
-  margin-right: 20px;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.button-group button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background: #4CAF50;
-  color: #fff;
-  cursor: pointer;
-}
-
-.button-group button:hover {
-  background: #45a049;
-}
-
-.review-details {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.review-details h3 {
-  margin-top: 0;
-}
-
-.review-details .event-image {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.review-details .event-image img {
-  max-width: 100%;
-  border-radius: 10px;
-}
-
-.review-details .ticket-info {
-  margin-top: 20px;
-}
-
-.step-4 {
-  padding: 20px;
-}
-
-.review-details {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.review-details h1 {
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-.review-details h3 {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.review-details .date-time-section,
-.review-details .ticket-information,
-.review-details .location-section,
-.review-details .event-description-section {
-  margin-top: 20px;
-}
-
-.review-details .date-time-details,
-.review-details .ticket-details {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.review-details .date-time-details img,
-.review-details .ticket-details img {
-  margin-right: 10px;
-  width: 24px;
-  height: 24px;
-}
-
-.review-details .date-time-details span,
-.review-details .ticket-details span {
-  font-size: 1rem;
-}
-
-.review-details .event-image {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.review-details .event-image img {
-  max-width: 100%;
-  border-radius: 10px;
-}
-
-.review-details .location-section p,
-.review-details .event-description-section p {
-  font-size: 1rem;
-  margin-top: 10px;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.button-group button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background: #4CAF50;
-  color: #fff;
-  cursor: pointer;
-}
-
-.button-group button:hover {
-  background: #45a049;
-}
-
-.step-3 .ticket-entry {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.step-3 .ticket-entry input {
-  margin-right: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.step-3 .remove-button {
-  padding: 10px 15px;
-  background: #e74c3c;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.step-3 .remove-button:hover {
-  background: #c0392b;
-}
-
-.step-3 .add-button {
-  padding: 10px 15px;
-  background: #3498db;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.step-3 .add-button:hover {
-  background: #2980b9;
-} 
-.review-details .ticket-information .ticket-details {
-  margin-top: 10px;
-}
-
-.review-details .ticket-information .ticket-list {
-  list-style-type: none; /* Remove default bullet points */
-  padding-left: 0; /* Remove default padding */
-  margin-top: 5px;
-}
-
-.review-details .ticket-information .ticket-item {
-  display: flex;
-  align-items: center;
-  padding: 5px 0; /* Add some spacing between items */
-  border-bottom: 1px solid #ddd; /* Optional: Add a separator between items */
-}
-
-.review-details .ticket-information .ticket-item:last-child {
-  border-bottom: none; /* Remove the border from the last item */
-}
-
-.review-details .ticket-information .ticket-item span {
-  font-size: 1rem;
-}
+ @import '../assets/css/CreateEvent.css';
 </style>

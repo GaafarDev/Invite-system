@@ -7,7 +7,7 @@ import OrganizerEventsPage from '../components/OrganizerEventsPage.vue';
 import CreateEventPage from '../components/CreateEventPage.vue';
 import OrganizerViewEventPage from '../components/OrganizerViewEventPage.vue';
 import SendInvitationPage from '../components/SendInvitationPage.vue';
-import EventDetailsPage from '../components/EventDetailsPage.vue';  // Import EventDetailsPage
+import EventDetailsPage from '../components/EventDetailsPage.vue';
 
 const routes = createRouter({
     history: createWebHistory(),
