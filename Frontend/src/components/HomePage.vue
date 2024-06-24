@@ -26,36 +26,103 @@
       </div>
     </div>
     <EventCategories />
-    <OrganizerEventsPage/>
+    <div class="events-page">
+      <h1>All Events</h1>
+      <div class="filters">
+        <button class="filter-btn">All</button>
+        <button class="filter-btn">Today</button>
+        <button class="filter-btn">Tomorrow</button>
+        <button class="filter-btn">This Weekend</button>
+        <button class="filter-btn">Free</button>
+      </div>
+
+      <div class="upcoming-events">
+        <h2>Upcoming Events</h2>
+        <div class="event-cards">
+          <EventCard
+            v-for="(event) in displayedUpcomingEvents"
+            :key="event.id"
+            @click="goToEventDetails(event)"
+            :eventType="event.category"
+            :eventMonth="getMonth(event.start_datetime)"
+            :eventDays="getDays(event.start_datetime, event.end_datetime)"
+            :eventTitle="event.title"
+            :eventLocation="event.location"
+            :eventTime="getTime(event.start_datetime, event.end_datetime)"
+            :eventPrice="getPrice(event.tickets)"
+            :eventInterested="event.interests.length"
+          />
+        </div>
+        <button v-if="showMoreUpcomingButton" @click="loadMoreUpcoming" class="see-more-btn">See More</button>
+      </div>
+
+      <div class="past-events">
+        <h2>Past Events</h2>
+        <div class="event-cards">
+          <EventCard
+            v-for="(event) in displayedPastEvents"
+            :key="event.id"
+            @click="goToEventDetails(event)"
+            :eventType="event.category"
+            :eventMonth="getMonth(event.start_datetime)"
+            :eventDays="getDays(event.start_datetime, event.end_datetime)"
+            :eventTitle="event.title"
+            :eventLocation="event.location"
+            :eventTime="getTime(event.start_datetime, event.end_datetime)"
+            :eventPrice="getPrice(event.tickets)"
+            :eventInterested="event.interests.length"
+          />
+        </div>
+        <button v-if="showMorePastButton" @click="loadMorePast" class="see-more-btn">See More</button>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
 import EventCategories from './EventCategories.vue';
+import EventCard from './EventCard.vue';
 import apiClient from '../services/api';
-import OrganizerEventsPage from './OrganizerEventsPage.vue';
 
 export default {
   components: {
     EventCategories,
-    OrganizerEventsPage,
+    EventCard,
   },
   data() {
     return {
       events: [],
       searchQuery: '',
       filteredEvents: [],
+      displayedUpcomingEvents: [],
+      displayedPastEvents: [],
+      upcomingLimit: 6,
+      pastLimit: 6,
     };
   },
-  mounted() {
-    this.fetchEvents();
+  computed: {
+    showMoreUpcomingButton() {
+      return this.displayedUpcomingEvents.length < this.upcomingEvents.length;
+    },
+    showMorePastButton() {
+      return this.displayedPastEvents.length < this.pastEvents.length;
+    },
+    upcomingEvents() {
+      const now = new Date();
+      return this.events.filter(event => new Date(event.start_datetime) > now).sort((a, b) => new Date(a.start_datetime) - new Date(b.start_datetime));
+    },
+    pastEvents() {
+      const now = new Date();
+      return this.events.filter(event => new Date(event.end_datetime) < now).sort((a, b) => new Date(b.start_datetime) - new Date(a.start_datetime));
+    }
   },
   methods: {
     async fetchEvents() {
       try {
         const response = await apiClient.get('/api/events');
         this.events = response.data;
+        this.updateDisplayedUpcomingEvents();
+        this.updateDisplayedPastEvents();
       } catch (error) {
         console.error('Error fetching events:', error);
       }
@@ -80,46 +147,54 @@ export default {
         console.error('Error searching events:', error);
       }
     },
+    loadMoreUpcoming() {
+      this.upcomingLimit += 6;
+      this.updateDisplayedUpcomingEvents();
+    },
+    loadMorePast() {
+      this.pastLimit += 6;
+      this.updateDisplayedPastEvents();
+    },
+    updateDisplayedUpcomingEvents() {
+      this.displayedUpcomingEvents = this.upcomingEvents.slice(0, this.upcomingLimit);
+    },
+    updateDisplayedPastEvents() {
+      this.displayedPastEvents = this.pastEvents.slice(0, this.pastLimit);
+    },
+    getMonth(datetime) {
+      const date = new Date(datetime);
+      return date.toLocaleString('default', { month: 'short' }).toUpperCase();
+    },
+    getDays(start, end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      if (startDate.getDate() === endDate.getDate()) {
+        return startDate.getDate();
+      }
+      return `${startDate.getDate()} - ${endDate.getDate()}`;
+    },
+    getTime(start, end) {
+      const startTime = new Date(start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const endTime = new Date(end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return `${startTime} - ${endTime}`;
+    },
+    getPrice(tickets) {
+      if (tickets.length === 0) {
+        return 'Free';
+      }
+      return `RM ${Math.min(...tickets.map(ticket => ticket.ticket_price))}`;
+    },
+    goToEventDetails(event) {
+      this.$router.push({ name: 'ViewEventDetails', params: { eventId: event.id } });
+    }
+  },
+  mounted() {
+    this.fetchEvents();
   },
 };
 </script>
 
 <style scoped>
-.dropdown {
-  position: absolute;
-  top: 40px;
-  left: 79px;
-  background: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 500px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-  color: #2D2C3C;
-  text-align: left;
-}
-
-.dropdown ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.dropdown li {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.dropdown li:hover {
-  background-color: #f0f0f0;
-}
-
-.no-events {
-  padding: 10px;
-  color: #2D2C3C; 
-  text-align: center;
-}
-
 .home-page {
   text-align: center;
 }
@@ -187,4 +262,85 @@ export default {
   background-color: #ffcc00;
 }
 
+.dropdown {
+  position: absolute;
+  top: 40px;
+  left: 79px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 500px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  color: #2D2C3C;
+  border-radius: 0 0 5px 5px;
+}
+
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown ul li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.dropdown ul li:hover {
+  background: #f5f5f5;
+}
+
+.dropdown .no-events {
+  padding: 10px;
+}
+
+.events-page {
+  padding: 2em 0;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.filter-btn {
+  margin: 0 0.5em;
+  padding: 0.5em 1em;
+  border: 1px solid #2D2C3C;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.filter-btn:hover {
+  background-color: #ffdd57;
+  border-color: #ffdd57;
+}
+
+.upcoming-events,
+.past-events {
+  margin: 2em 0;
+}
+
+.event-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.see-more-btn {
+  padding: 0.5em 2em;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffdd57;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.see-more-btn:hover {
+  background-color: #ffcc00;
+}
 </style>
