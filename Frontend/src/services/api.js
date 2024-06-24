@@ -1,16 +1,8 @@
-import axios from 'axios';
 
-axios.defaults.withCredentials = true;
-
-const apiClient = axios.create({
-  baseURL: 'http://127.0.0.1:8000',  // Ensure this matches your Laravel server URL
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  }
-});
 
 // Add a request interceptor
+
+export default apiClient;
 apiClient.interceptors.request.use(
   config => {
     const token = localStorage.getItem('token');
@@ -23,5 +15,14 @@ apiClient.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+import axios from 'axios';
 
-export default apiClient;
+axios.defaults.withCredentials = true;
+
+const apiClient = axios.create({
+  baseURL: 'http://127.0.0.1:8000',  // Ensure this matches your Laravel server URL
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }
+});
