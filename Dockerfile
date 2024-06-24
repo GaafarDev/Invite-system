@@ -5,11 +5,11 @@ FROM composer:2 as backend
 
 WORKDIR /app
 
-COPY composer.json composer.lock ./
+COPY Backend/composer.json Backend/composer.lock ./
 
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist
 
-COPY . .
+COPY Backend/ .
 
 # Copy the .env.example file and rename it to .env
 RUN cp /app/.env.example /app/.env
