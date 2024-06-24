@@ -10,14 +10,6 @@
 import NavBar from './components/NavBar.vue';
 import PageFooter from './components/PageFooter.vue';
 
-
-</script>
-
-<style scoped>
-</style>
-
-
-
 export default {
   name: 'App',
   components: {
@@ -30,3 +22,11 @@ export default {
     }
   }
 }
+</script>
+
+<style scoped>
+@import './assets/css/styles.css';
+</style>
+
+
+
