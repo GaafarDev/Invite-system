@@ -127,7 +127,7 @@
         </div>
       </div>
 
-      <!-- Ticket Information -->
+
 <div class="ticket-information">
   <h3>Ticket Information</h3>
   <div v-if="formData.eventType === 'Ticketed'" class="ticket-details">
@@ -146,20 +146,18 @@
 </div>
 
 
-      <!-- Location -->
       <div class="location-section">
         <h3>Location</h3>
         <p>{{ formData.eventLocation }}</p>
       </div>
 
-      <!-- Event Description -->
+
       <div class="event-description-section">
         <h3>Event Description</h3>
         <p>{{ formData.eventDescription }}</p>
       </div>
     </div>
 
-    <!-- Navigation Buttons -->
     <div class="button-group">
       <button @click="previousStep">Go back to Ticketing</button>
       <button @click="submitEvent">Publish Event</button>
@@ -185,7 +183,7 @@ export default {
         eventLocation: '',
         eventDescription: '',
         eventType: '',
-        tickets: [] // Array to hold multiple tickets
+        tickets: [] 
       },
       uploadedImage: null
     };
@@ -222,8 +220,8 @@ export default {
         end_datetime: `${this.formData.endDate} ${this.formData.endTime}`,
         location: this.formData.eventLocation,
         image_link: this.imagePreview,
-        user_id: 1, // Replace with actual user ID or fetch dynamically
-        tickets: [], // Initialize tickets as null by default
+        user_id: 1,
+        tickets: [], 
       };
 
       if (this.formData.eventType === 'Ticketed') {
@@ -232,7 +230,6 @@ export default {
           ticket_price: ticket.price,
         }));
       } else if (this.formData.eventType === 'Free') {
-        // Automatically add a default ticket for Free events
         eventData.tickets = [{
           ticket_name: 'Free admission',
           ticket_price: 0,
@@ -242,39 +239,32 @@ export default {
       apiClient.post('/api/events/', eventData)
         .then(response => {
           console.log('Event submitted successfully', response.data);
-          // Reset form data or redirect to success page
+          window.alert('Event created!');
+          window.location.reload();
         })
         .catch(error => {
           console.error('There was an error submitting the event:', error.response ? error.response.data : error.message);
-          // Display specific error messages to the user or handle the error accordingly
           if (error.response && error.response.status === 422) {
             const errors = error.response.data.errors;
             if (errors) {
-              // Handle specific field errors or display a general error message
               console.log('Validation errors:', errors);
             }
           } else {
-            // Handle other types of errors (network, server down, etc.)
             console.error('Unhandled error:', error.message);
           }
         });
     },
     validateStep1() {
-      // Validation logic for Step 1
-      // Implement as per your requirements
-      return true; // Replace with your actual validation logic
+      return true;
     },
     validateStep2() {
-      // Validation logic for Step 2
-      // Implement as per your requirements
-      return true; // Replace with your actual validation logic
+      return true; 
     },
     validateStep3() {
       if (!this.formData.eventType) {
         alert('Please select an event type.');
         return false;
       }
-      // No need to validate tickets if the event type is 'Free'
       return true;
     },
     addTicket() {
